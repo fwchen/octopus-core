@@ -8,7 +8,6 @@ import javax.validation.Valid
 @RestController
 class KanbanController(private val kanbanApplicationService: KanbanApplicationService) {
 
-
     @RequestMapping(value = ["/kanban"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
     fun createKanban(@RequestBody command: @Valid CreateKanbanCommand, @RequestHeader("X-App-Auth-UserId") userId: Long) {
