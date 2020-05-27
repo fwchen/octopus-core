@@ -10,7 +10,7 @@ class KanbanController(private val kanbanApplicationService: KanbanApplicationSe
 
     @RequestMapping(value = ["/kanban"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun createKanban(@RequestBody command: @Valid CreateKanbanCommand, @RequestHeader("X-App-Auth-UserId") userId: Long) {
+    fun createKanban(@RequestBody command: @Valid CreateKanbanCommand, @RequestHeader("X-App-Auth-UserId") userId: String) {
         command.creatorId = userId
         kanbanApplicationService.createKanban(command)
     }

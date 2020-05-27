@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class ProjectApplicationService(private val projectRepository: ProjectRepository, private val projectFactory: ProjectFactory) {
 
 
-    fun queryProjectList(creatorId: Long): List<Project> {
+    fun queryProjectList(creatorId: String): List<Project> {
         return projectRepository.findAllByCreatorId(creatorId)
     }
 

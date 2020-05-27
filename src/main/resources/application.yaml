@@ -1,6 +1,15 @@
 server:
   port: 9820
 
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+
 spring:
   data:
     mongodb:

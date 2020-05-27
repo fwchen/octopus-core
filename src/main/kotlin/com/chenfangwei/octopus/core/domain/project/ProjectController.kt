@@ -10,13 +10,13 @@ class ProjectController(private val projectApplicationService: ProjectApplicatio
 
     @RequestMapping(value = ["/project"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProject(@RequestBody command: @Valid CreateProjectCommand, @RequestHeader("X-App-Auth-UserId") userId: Long) {
+    fun createProject(@RequestBody command: @Valid CreateProjectCommand, @RequestHeader("X-App-Auth-UserId") userId: String) {
         command.creatorId = userId
         projectApplicationService.createProject(command)
     }
 
     @RequestMapping(value = ["/projects"], method = [RequestMethod.GET])
-    fun queryProjectList(@RequestHeader("X-App-Auth-UserId") userId: Long) {
+    fun queryProjectList(@RequestHeader("X-App-Auth-UserId") userId: String) {
         projectApplicationService.queryProjectList(userId)
     }
 

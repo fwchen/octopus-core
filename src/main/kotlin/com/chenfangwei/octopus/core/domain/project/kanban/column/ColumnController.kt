@@ -11,7 +11,7 @@ class ColumnController(private val columnApplicationService: ColumnApplicationSe
 
     @RequestMapping(value = ["/column"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun createKanban(@RequestBody command: @Valid CreateColumnCommand, @RequestHeader("X-App-Auth-UserId") userId: Long) {
+    fun createKanban(@RequestBody command: @Valid CreateColumnCommand, @RequestHeader("X-App-Auth-UserId") userId: String) {
         command.creatorId = userId
         columnApplicationService.createColumn(command)
     }

@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "kanban")
-class Kanban(val name: String, val creatorId: Long, val projectId: String) {
+class Kanban(val name: String, val creatorId: String, val projectId: String) {
     @Id
-    lateinit var id: String;
+    lateinit var id: String
 }

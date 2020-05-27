@@ -4,5 +4,5 @@ import com.chenfangwei.octopus.core.domain.project.model.Project
 import org.springframework.data.mongodb.repository.MongoRepository
 
 interface ProjectRepository: MongoRepository<Project, String> {
-    fun findAllByCreatorId(creatorId: Long): List<Project>
+    fun findAllByCreatorId(creatorId: String): List<Project>
 }
