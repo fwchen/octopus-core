@@ -16,6 +16,7 @@ build/
 
 ### IntelliJ IDEA ###
 .idea
+!.idea/vcs.xml
 *.iws
 *.iml
 *.ipr

@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "project")
 class Project(@Id val id: String, val name: String, val creatorId: String) {
     lateinit var projectSetting: ProjectSetting
+
+    public var coverURI: String = ""
 }
