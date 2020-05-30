@@ -3,6 +3,7 @@ server:
 
 logging:
   level:
+    root: INFO
     org:
       springframework:
         web:
@@ -13,9 +14,12 @@ spring:
   data:
     mongodb:
       host: localhost
+      database: octopus
 
 storage:
   minio:
     endpoint: http://localhost:9000
-    accesskey：minio
+    accesskey: minio
     secretkey: miniostorage
+    buckets:
+      image: octopus-image

@@ -15,6 +15,7 @@ class ApiValidationExceptionHandler : ResponseEntityExceptionHandler() {
           headers: HttpHeaders,
           status: HttpStatus,
           request: WebRequest): ResponseEntity<Any> {
+    logger.warn(ex.printStackTrace())
     return ResponseEntity(HttpStatus.BAD_REQUEST)
   }
 }
