@@ -1,6 +1,5 @@
 package com.chenfangwei.octopus.core.storage
 
-import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.share.exception.EntityNotFoundException
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.*

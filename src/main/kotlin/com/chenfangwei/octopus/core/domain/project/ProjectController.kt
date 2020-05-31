@@ -3,7 +3,7 @@ package com.chenfangwei.octopus.core.domain.project
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.command.CreateProjectCommand
 import com.chenfangwei.octopus.core.domain.project.command.SetProjectCoverCommand
-import com.chenfangwei.octopus.core.domain.project.model.Project
+import com.chenfangwei.octopus.core.domain.project.presenter.ProjectDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -18,15 +18,20 @@ class ProjectController(private val projectApplicationService: ProjectApplicatio
         projectApplicationService.createProject(command)
     }
 
-    @RequestMapping(value = ["/projects"], method = [RequestMethod.GET])
-    fun queryProjectList(@RequestHeader(AuthUserIdKey) userId: String): List<Project> {
-        return projectApplicationService.queryProjectList(userId)
+    @RequestMapping(value = ["/project/{projectId}"], method = [RequestMethod.GET])
+    fun queryProjectDetail(@PathVariable projectId: String, @RequestHeader(AuthUserIdKey) userId: String): ProjectDTO {
+        return ProjectDTO(projectApplicationService.projectDetail(projectId, userId))
     }
 
-    @RequestMapping(value = ["/project/cover"], method = [RequestMethod.POST])
+    @RequestMapping(value = ["/projects"], method = [RequestMethod.GET])
+    fun queryProjectList(@RequestHeader(AuthUserIdKey) userId: String): List<ProjectDTO> {
+        return projectApplicationService.projectList(userId).map{ it-> ProjectDTO(it)}
+    }
+
+    @RequestMapping(value = ["/project/{projectId}/cover"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun setProjectCover(@RequestBody command: @Valid SetProjectCoverCommand, @RequestHeader(AuthUserIdKey) userId: String) {
+    fun setProjectCover(@RequestBody command: @Valid SetProjectCoverCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String) {
         command.userId = userId
-        projectApplicationService.setProjectCover(command)
+        projectApplicationService.setProjectCover(projectId, command)
     }
 }

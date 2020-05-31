@@ -13,8 +13,8 @@ class Project(@Id val id: String, val name: String, val creatorId: String) {
     var coverUri: String = ""
 
     @CreatedDate
-    var createdAt: Date? = null
+    var createdAt: Date = Date()
 
     @LastModifiedDate
-    var updatedAt: Date? = null
+    var updatedAt: Date = Date()
 }

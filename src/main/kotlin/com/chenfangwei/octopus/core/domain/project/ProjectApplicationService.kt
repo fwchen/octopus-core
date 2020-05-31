@@ -9,7 +9,6 @@ import com.chenfangwei.octopus.core.share.exception.EntityNotFoundException
 import com.chenfangwei.octopus.core.share.exception.ResourcePermissionException
 import com.chenfangwei.octopus.core.storage.StorageService
 import org.springframework.stereotype.Service
-import javax.validation.Valid
 
 @Service
 class ProjectApplicationService(private val projectRepository: ProjectRepository,
@@ -17,8 +16,7 @@ class ProjectApplicationService(private val projectRepository: ProjectRepository
                                 private val projectPermissionService: ProjectPermissionService,
                                 private val storageService: StorageService) {
 
-
-    fun queryProjectList(creatorId: String): List<Project> {
+    fun projectList(creatorId: String): List<Project> {
         return projectRepository.findAllByCreatorId(creatorId)
     }
 
@@ -27,12 +25,20 @@ class ProjectApplicationService(private val projectRepository: ProjectRepository
         projectRepository.save(project)
     }
 
-    fun setProjectCover(command: @Valid SetProjectCoverCommand) {
-        val project = projectRepository.findById(command.projectId).orElseThrow{ EntityNotFoundException("project not found") }
+    fun setProjectCover(projectId: String, command: SetProjectCoverCommand) {
+        val project = projectRepository.findById(projectId).orElseThrow{ EntityNotFoundException("project not found") }
         if (!projectPermissionService.canOperateProject(project, command.userId)) {
             throw ResourcePermissionException()
         }
         project.coverUri = storageService.saveBase64PngImage(command.coverCode)
         projectRepository.save(project)
+    }
+
+    fun projectDetail(projectId: String, userId: String): Project {
+        val project = projectRepository.findById(projectId).orElseThrow{ EntityNotFoundException("project not found") }
+        if (!projectPermissionService.canOperateProject(project, userId)) {
+            throw ResourcePermissionException()
+        }
+        return project
     }
 }

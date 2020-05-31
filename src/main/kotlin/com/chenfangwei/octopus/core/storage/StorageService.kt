@@ -17,10 +17,13 @@ class StorageService(
         val pureCode = code.replace(Regex("^data:image/png;base64,"), "")
         val byteArray: ByteArray = Base64.getDecoder().decode(pureCode)
         val byteArrayInputStream = ByteArrayInputStream(byteArray)
+        val toMd5Stream = ByteArrayInputStream(byteArray)
         val options = PutObjectOptions(byteArrayInputStream.available().toLong(), -1)
         options.setContentType("image/png")
-        val objectName: String = DigestUtils.md5DigestAsHex(byteArrayInputStream).toUpperCase()
+        val objectName: String = DigestUtils.md5DigestAsHex(toMd5Stream).toUpperCase()
         minIOService.getMinioClient().putObject(imageBucketName, objectName, byteArrayInputStream, options)
+        byteArrayInputStream.close()
+        toMd5Stream.close()
         return "object://$objectName"
     }
 
