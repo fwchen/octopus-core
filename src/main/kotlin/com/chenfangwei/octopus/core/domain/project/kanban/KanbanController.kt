@@ -22,4 +22,9 @@ class KanbanController(private val kanbanApplicationService: KanbanApplicationSe
     fun queryKanbanList(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<KanbanDTO> {
         return kanbanApplicationService.kanbanList(projectId, userId).map{ it-> KanbanDTO(it) }
     }
+
+    @RequestMapping(value = ["/kanban/{kanbanId}"], method = [RequestMethod.GET])
+    fun queryKanbanDetail(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable kanbanId: String): KanbanDTO {
+        return KanbanDTO(kanbanApplicationService.kanbanDetail(kanbanId, userId))
+    }
 }
