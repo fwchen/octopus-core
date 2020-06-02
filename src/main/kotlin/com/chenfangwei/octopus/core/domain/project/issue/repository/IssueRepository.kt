@@ -4,4 +4,5 @@ import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import org.springframework.data.mongodb.repository.MongoRepository
 
 interface IssueRepository: MongoRepository<Issue, String> {
+    fun findAllByColumnId(columnId: String): List<Issue>
 }

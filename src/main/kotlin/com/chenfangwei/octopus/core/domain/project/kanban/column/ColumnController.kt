@@ -17,8 +17,8 @@ class ColumnController(private val columnApplicationService: ColumnApplicationSe
         columnApplicationService.createColumn(command)
     }
 
-    @RequestMapping(value = ["/kanban/{kanbanId}/column"], method = [RequestMethod.GET])
+    @RequestMapping(value = ["/kanban/{kanbanId}/columns"], method = [RequestMethod.GET])
     fun queryColumns(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable kanbanId: String) {
-        columnApplicationService.kanbanColumns(kanbanId, userId)
+        val columns = columnApplicationService.kanbanColumns(kanbanId, userId)
     }
 }

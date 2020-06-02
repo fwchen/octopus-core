@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class KanbanPermissionService(private val kanbanRepository: KanbanRepository) {
     fun canReadKanban(kanbanId: String, userId: String): Boolean {
         val kanban = kanbanRepository.findById(kanbanId).orElseThrow { EntityNotFoundException() }
-        return kanban.creatorId === userId
+        return kanban.creatorId == userId
     }
 
     fun checkCanReadKanban(kanbanId: String, userId: String) {
