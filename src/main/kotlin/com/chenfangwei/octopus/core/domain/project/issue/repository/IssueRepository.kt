@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 
 interface IssueRepository: MongoRepository<Issue, String> {
     fun findAllByColumnId(columnId: String): List<Issue>
+    fun countByProjectId(projectId: String): Int
 }
