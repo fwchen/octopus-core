@@ -4,17 +4,23 @@ import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueComm
 import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository
+import com.chenfangwei.octopus.core.share.exception.EntityNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
 class IssueApplicationService(private val issueRepository: IssueRepository, private val issueFactory: IssueFactory) {
 
-    fun createIssue(command: CreateIssueCommand) {
+    fun createIssue(command: CreateIssueCommand): String {
         val issue = issueFactory.issue(command)
         issueRepository.save(issue)
+        return issue.id;
     }
 
     fun queryColumnIssues(columnId: String): List<Issue> {
         return issueRepository.findAllByColumnId(columnId)
+    }
+
+    fun queryIssueDetail(issueId: String): Issue {
+        return issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
     }
 }
