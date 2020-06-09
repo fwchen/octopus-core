@@ -16,7 +16,11 @@ import javax.validation.Valid
 
 
 @RestController
-class ProjectController(private val projectApplicationService: ProjectApplicationService, restTemplateBuilder: RestTemplateBuilder) {
+class ProjectController(
+        private val projectApplicationService: ProjectApplicationService,
+        private val projectPermissionService: ProjectPermissionService,
+        restTemplateBuilder: RestTemplateBuilder
+) {
     private val restTemplate: RestTemplate = restTemplateBuilder.build()
 
 
@@ -50,6 +54,7 @@ class ProjectController(private val projectApplicationService: ProjectApplicatio
     @RequestMapping(value = ["/project/{projectId}/participants"], method = [RequestMethod.GET])
     fun projectParticipants(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<Account> {
         val url = "$accountServiceUrl/accounts"
+        projectPermissionService.guardOperationProject(projectId, userId)
         return restTemplate.getForObject(url, Array<Account>::class.java)!!.toList()
     }
 }
