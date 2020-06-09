@@ -4,12 +4,24 @@ import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.command.CreateProjectCommand
 import com.chenfangwei.octopus.core.domain.project.command.SetProjectCoverCommand
 import com.chenfangwei.octopus.core.domain.project.presenter.ProjectDTO
+import com.chenfangwei.octopus.core.share.model.Account
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.RestTemplate
+import java.util.*
 import javax.validation.Valid
 
+
 @RestController
-class ProjectController(private val projectApplicationService: ProjectApplicationService) {
+class ProjectController(private val projectApplicationService: ProjectApplicationService, restTemplateBuilder: RestTemplateBuilder) {
+    private val restTemplate: RestTemplate = restTemplateBuilder.build()
+
+
+    @Value("\${service.account}")
+    private lateinit var accountServiceUrl: String
 
     @RequestMapping(value = ["/project"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,7 +37,7 @@ class ProjectController(private val projectApplicationService: ProjectApplicatio
 
     @RequestMapping(value = ["/projects"], method = [RequestMethod.GET])
     fun queryProjectList(@RequestHeader(AuthUserIdKey) userId: String): List<ProjectDTO> {
-        return projectApplicationService.projectList(userId).map{ it-> ProjectDTO(it)}
+        return projectApplicationService.projectList(userId).map { it -> ProjectDTO(it) }
     }
 
     @RequestMapping(value = ["/project/{projectId}/cover"], method = [RequestMethod.POST])
@@ -33,5 +45,11 @@ class ProjectController(private val projectApplicationService: ProjectApplicatio
     fun setProjectCover(@RequestBody command: @Valid SetProjectCoverCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String) {
         command.userId = userId
         projectApplicationService.setProjectCover(projectId, command)
+    }
+
+    @RequestMapping(value = ["/project/{projectId}/participants"], method = [RequestMethod.GET])
+    fun projectParticipants(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<Account> {
+        val url = "$accountServiceUrl/accounts"
+        return restTemplate.getForObject(url, Array<Account>::class.java)!!.toList()
     }
 }

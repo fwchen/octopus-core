@@ -1,6 +1,9 @@
 server:
   port: 9820
 
+service:
+  account: http://localhost:9810
+
 logging:
   level:
     root: INFO
