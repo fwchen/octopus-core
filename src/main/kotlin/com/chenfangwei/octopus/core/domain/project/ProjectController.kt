@@ -67,6 +67,4 @@ class ProjectController(
         projectPermissionService.guardOperationProject(projectId, userId)
         return restTemplate.getForObject(url, Array<Account>::class.java)!!.toList()
     }
-
-
 }
