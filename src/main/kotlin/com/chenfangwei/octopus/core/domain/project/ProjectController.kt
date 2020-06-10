@@ -3,6 +3,7 @@ package com.chenfangwei.octopus.core.domain.project
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.command.CreateProjectCommand
 import com.chenfangwei.octopus.core.domain.project.command.SetProjectCoverCommand
+import com.chenfangwei.octopus.core.domain.project.command.UpdateProjectCommand
 import com.chenfangwei.octopus.core.domain.project.presenter.ProjectDTO
 import com.chenfangwei.octopus.core.share.exception.ResourcePermissionException
 import com.chenfangwei.octopus.core.share.model.Account
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
 import java.util.*
 import javax.validation.Valid
-
 
 @RestController
 class ProjectController(
@@ -42,6 +42,12 @@ class ProjectController(
         return ProjectDTO(projectApplicationService.projectDetail(projectId, userId))
     }
 
+    @RequestMapping(value = ["/project/{projectId}"], method = [RequestMethod.PATCH])
+    fun updateProject(@RequestBody command: @Valid UpdateProjectCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String) {
+        projectPermissionService.guardOperationProject(projectId, userId)
+        projectApplicationService.updateProject(projectId, command)
+    }
+
     @RequestMapping(value = ["/projects"], method = [RequestMethod.GET])
     fun queryProjectList(@RequestHeader(AuthUserIdKey) userId: String): List<ProjectDTO> {
         return projectApplicationService.projectList(userId).map { it -> ProjectDTO(it) }
@@ -50,6 +56,7 @@ class ProjectController(
     @RequestMapping(value = ["/project/{projectId}/cover"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
     fun setProjectCover(@RequestBody command: @Valid SetProjectCoverCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String) {
+        projectPermissionService.guardOperationProject(projectId, userId)
         command.userId = userId
         projectApplicationService.setProjectCover(projectId, command)
     }
@@ -60,4 +67,6 @@ class ProjectController(
         projectPermissionService.guardOperationProject(projectId, userId)
         return restTemplate.getForObject(url, Array<Account>::class.java)!!.toList()
     }
+
+
 }

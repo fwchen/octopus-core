@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 @Document(collection = "project")
-class Project(@Id val id: String, val name: String, val creatorId: String) {
+class Project(@Id val id: String, var name: String, val creatorId: String) {
     lateinit var projectSetting: ProjectSetting
 
     var coverUri: String = ""
