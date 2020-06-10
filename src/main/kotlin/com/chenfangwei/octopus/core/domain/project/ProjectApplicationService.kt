@@ -35,10 +35,6 @@ class ProjectApplicationService(private val projectRepository: ProjectRepository
     }
 
     fun projectDetail(projectId: String, userId: String): Project {
-        val project = projectRepository.findById(projectId).orElseThrow{ EntityNotFoundException("project not found") }
-        if (!projectPermissionService.canOperateProject(project, userId)) {
-            throw ResourcePermissionException()
-        }
-        return project
+        return projectRepository.findById(projectId).orElseThrow { EntityNotFoundException("project not found") }
     }
 }

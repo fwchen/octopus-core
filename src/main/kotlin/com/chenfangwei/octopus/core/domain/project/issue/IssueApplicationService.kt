@@ -1,6 +1,7 @@
 package com.chenfangwei.octopus.core.domain.project.issue
 
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
+import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository
@@ -22,5 +23,11 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
 
     fun queryIssueDetail(issueId: String): Issue {
         return issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+    }
+
+    fun updateIssue(command: UpdateIssueCommand) {
+        var issue = issueRepository.findById(command.id).orElseThrow { EntityNotFoundException() }
+        command.copyToIssue(issue)
+        issueRepository.save(issue)
     }
 }

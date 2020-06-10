@@ -4,6 +4,7 @@ import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.command.CreateProjectCommand
 import com.chenfangwei.octopus.core.domain.project.command.SetProjectCoverCommand
 import com.chenfangwei.octopus.core.domain.project.presenter.ProjectDTO
+import com.chenfangwei.octopus.core.share.exception.ResourcePermissionException
 import com.chenfangwei.octopus.core.share.model.Account
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -23,7 +24,6 @@ class ProjectController(
 ) {
     private val restTemplate: RestTemplate = restTemplateBuilder.build()
 
-
     @Value("\${service.account}")
     private lateinit var accountServiceUrl: String
 
@@ -36,6 +36,9 @@ class ProjectController(
 
     @RequestMapping(value = ["/project/{projectId}"], method = [RequestMethod.GET])
     fun queryProjectDetail(@PathVariable projectId: String, @RequestHeader(AuthUserIdKey) userId: String): ProjectDTO {
+        if (!projectPermissionService.canOperateProject(projectId, userId)) {
+            throw ResourcePermissionException()
+        }
         return ProjectDTO(projectApplicationService.projectDetail(projectId, userId))
     }
 
