@@ -1,6 +1,7 @@
 package com.chenfangwei.octopus.core.domain.project.issue
 
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
+import com.chenfangwei.octopus.core.domain.project.ProjectPermissionService
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
@@ -12,7 +13,8 @@ import javax.validation.Valid
 @RestController
 class IssueController(
         private val issueApplicationService: IssueApplicationService,
-        private val issuePermissionService: IssuePermissionService) {
+        private val issuePermissionService: IssuePermissionService,
+        private val projectPermissionService: ProjectPermissionService) {
 
     @RequestMapping(value = ["/issue"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
@@ -24,6 +26,12 @@ class IssueController(
     @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.GET])
     fun queryIssueDetail(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable issueId: String): Issue {
         return issueApplicationService.queryIssueDetail(issueId)
+    }
+
+    @RequestMapping(value = ["/project/{projectId}/issues"], method = [RequestMethod.GET])
+    fun queryProjectIssues(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<Issue> {
+        projectPermissionService.guardOperationProject(projectId, userId)
+        return issueApplicationService.queryProjectIssues(projectId)
     }
 
     @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.PATCH])

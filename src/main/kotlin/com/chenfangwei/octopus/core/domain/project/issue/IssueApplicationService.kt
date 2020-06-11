@@ -14,7 +14,7 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
     fun createIssue(command: CreateIssueCommand): String {
         val issue = issueFactory.issue(command)
         issueRepository.save(issue)
-        return issue.id;
+        return issue.id
     }
 
     fun queryColumnIssues(columnId: String): List<Issue> {
@@ -26,8 +26,12 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
     }
 
     fun updateIssue(command: UpdateIssueCommand) {
-        var issue = issueRepository.findById(command.id).orElseThrow { EntityNotFoundException() }
+        val issue = issueRepository.findById(command.id).orElseThrow { EntityNotFoundException() }
         command.copyToIssue(issue)
         issueRepository.save(issue)
+    }
+
+    fun queryProjectIssues(projectId: String): List<Issue> {
+        return issueRepository.findAllByProjectId(projectId)
     }
 }
