@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service
 import javax.validation.Valid
 
 @Service
-class ColumnApplicationService(private val columnRepository: ColumnRepository, private  val kanbanPermissionService: KanbanPermissionService) {
-    fun createColumn(command: @Valid CreateColumnCommand) {
+class ColumnApplicationService(private val columnRepository: ColumnRepository) {
+    fun createColumn(command: CreateColumnCommand) {
         val column = Column(command.name, command.creatorId, command.kanbanId, command.projectId)
         this.columnRepository.save(column)
     }
 
     fun kanbanColumns(kanbanId: String, userId: String): List<Column> {
-        kanbanPermissionService.checkCanReadKanban(kanbanId, userId)
         return columnRepository.findAllByKanbanId(kanbanId)
+    }
+
+    fun deleteColumn(id: String) {
+        this.columnRepository.deleteById(id)
     }
 }
