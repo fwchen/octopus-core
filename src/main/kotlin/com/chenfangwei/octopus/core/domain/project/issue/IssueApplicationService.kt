@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service
 class IssueApplicationService(private val issueRepository: IssueRepository, private val issueFactory: IssueFactory) {
 
     fun createIssue(command: CreateIssueCommand): String {
+        val maxOrderIssue = this.issueRepository.findTop1ByProjectIdOrderByOrderDesc(command.projectId)
         val issue = issueFactory.issue(command)
+        issue.initOrderByMaxIssue(maxOrderIssue)
         issueRepository.save(issue)
         return issue.id
     }
