@@ -1,6 +1,7 @@
 package com.chenfangwei.octopus.core.domain.project.kanban
 
 import com.chenfangwei.octopus.core.domain.project.ProjectPermissionService
+import com.chenfangwei.octopus.core.domain.project.kanban.column.presenter.ColumnDTO
 import com.chenfangwei.octopus.core.domain.project.kanban.command.CreateKanbanCommand
 import com.chenfangwei.octopus.core.domain.project.kanban.model.Kanban
 import com.chenfangwei.octopus.core.domain.project.kanban.repository.KanbanRepository
@@ -29,4 +30,6 @@ class KanbanApplicationService(private val kanbanRepository: KanbanRepository,
         projectPermissionService.canOperateProject(kanban.projectId, userId)
         return kanban
     }
+
+
 }

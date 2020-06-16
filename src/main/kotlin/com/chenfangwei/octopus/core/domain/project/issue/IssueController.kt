@@ -5,6 +5,8 @@ import com.chenfangwei.octopus.core.domain.project.ProjectPermissionService
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
+import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDTO
+import com.chenfangwei.octopus.core.domain.project.kanban.column.presenter.ColumnDTO
 import com.chenfangwei.octopus.core.share.exception.BadRequestException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -42,5 +44,10 @@ class IssueController(
         command.userId = userId
         issuePermissionService.guardOperationIssue(issueId, userId)
         issueApplicationService.updateIssue(command)
+    }
+
+    @RequestMapping(value = ["/kanban/{kanbanId}/recently-issues"], method = [RequestMethod.GET])
+    fun queryRecentlyIssues(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable kanbanId: String): List<IssueDTO> {
+        return issueApplicationService.kanbanRecentlyIssues(kanbanId).map { IssueDTO(it) }
     }
 }

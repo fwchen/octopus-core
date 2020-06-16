@@ -23,7 +23,11 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     @LastModifiedDate
     var updatedAt: Date? = null
 
-    fun initOrderByMaxIssue(maxOrderIssue: Issue) {
-        this.order = maxOrderIssue.order + 100
+    fun initOrderByMaxIssue(maxOrderIssue: Issue?) {
+        if (maxOrderIssue == null) {
+            this.order = 0F
+        } else {
+            this.order = maxOrderIssue.order + 100F
+        }
     }
 }

@@ -9,5 +9,6 @@ interface IssueRepository: MongoRepository<Issue, String> {
     fun findAllByColumnId(columnId: String): List<Issue>
     fun countByProjectId(projectId: String): Int
     fun findAllByProjectId(projectId: String): List<Issue>
-    fun findTop1ByProjectIdOrderByOrderDesc(projectId: String): Issue
+    fun findTop1ByProjectIdOrderByOrderDesc(projectId: String): Issue?
+    fun findTop10ByKanbanIdOrderByUpdatedAtDesc(kanbanId: String): List<Issue>
 }

@@ -34,6 +34,7 @@ class ColumnController(
         }
     }
 
+
     @RequestMapping(value = ["/column/{columnId}"], method = [RequestMethod.DELETE])
     fun deleteColumn(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable columnId: String) {
         val column = columnRepository.findById(columnId).orElseThrow { EntityNotFoundException() }
