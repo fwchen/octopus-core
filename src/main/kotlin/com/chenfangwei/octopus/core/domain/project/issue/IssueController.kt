@@ -3,9 +3,12 @@ package com.chenfangwei.octopus.core.domain.project.issue
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.ProjectPermissionService
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
+import com.chenfangwei.octopus.core.domain.project.issue.command.RankIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
+import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueChangedOrderDTO
 import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDTO
+import com.chenfangwei.octopus.core.domain.project.kanban.KanbanPermissionService
 import com.chenfangwei.octopus.core.domain.project.kanban.column.presenter.ColumnDTO
 import com.chenfangwei.octopus.core.share.exception.BadRequestException
 import org.springframework.http.HttpStatus
@@ -16,7 +19,8 @@ import javax.validation.Valid
 class IssueController(
         private val issueApplicationService: IssueApplicationService,
         private val issuePermissionService: IssuePermissionService,
-        private val projectPermissionService: ProjectPermissionService) {
+        private val projectPermissionService: ProjectPermissionService,
+        private val issueApplicationRankService: IssueApplicationRankService) {
 
     @RequestMapping(value = ["/issue"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,5 +53,12 @@ class IssueController(
     @RequestMapping(value = ["/kanban/{kanbanId}/recently-issues"], method = [RequestMethod.GET])
     fun queryRecentlyIssues(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable kanbanId: String): List<IssueDTO> {
         return issueApplicationService.kanbanRecentlyIssues(kanbanId).map { IssueDTO(it) }
+    }
+
+    @RequestMapping(value = ["/project/{projectId}/rank-issue"], method = [RequestMethod.POST])
+    fun rankIssue(@RequestBody command: RankIssueCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<IssueChangedOrderDTO> {
+        projectPermissionService.guardOperationProject(projectId, userId)
+        val changedIssues = issueApplicationRankService.rankIssue(command.issueId, command.targetIssueId, command.isBefore)
+        return changedIssues.map { IssueChangedOrderDTO(it) }
     }
 }

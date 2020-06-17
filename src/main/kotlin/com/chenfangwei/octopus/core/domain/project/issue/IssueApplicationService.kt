@@ -37,9 +37,7 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
         return issueRepository.findAllByProjectId(projectId)
     }
 
-    fun rankIssue(issueId: String, targetIssueId: String) {
 
-    }
 
     fun kanbanRecentlyIssues(kanbanId: String): List<Issue> {
         return issueRepository.findTop10ByKanbanIdOrderByUpdatedAtDesc(kanbanId)
