@@ -58,7 +58,7 @@ class IssueController(
     @RequestMapping(value = ["/project/{projectId}/rank-issue"], method = [RequestMethod.POST])
     fun rankIssue(@RequestBody command: RankIssueCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<IssueChangedOrderDTO> {
         projectPermissionService.guardOperationProject(projectId, userId)
-        val changedIssues = issueApplicationRankService.rankIssue(command.issueId, command.targetIssueId, command.isBefore)
+        val changedIssues = issueApplicationRankSRervice.rankIssue(command.issueId, command.targetIssueId, command.isBefore)
         return changedIssues.map { IssueChangedOrderDTO(it) }
     }
 }
