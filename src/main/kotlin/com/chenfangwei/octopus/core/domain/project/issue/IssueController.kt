@@ -8,8 +8,6 @@ import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueComm
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueChangedOrderDTO
 import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDTO
-import com.chenfangwei.octopus.core.domain.project.kanban.KanbanPermissionService
-import com.chenfangwei.octopus.core.domain.project.kanban.column.presenter.ColumnDTO
 import com.chenfangwei.octopus.core.share.exception.BadRequestException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -58,7 +56,12 @@ class IssueController(
     @RequestMapping(value = ["/project/{projectId}/rank-issue"], method = [RequestMethod.POST])
     fun rankIssue(@RequestBody command: RankIssueCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable projectId: String): List<IssueChangedOrderDTO> {
         projectPermissionService.guardOperationProject(projectId, userId)
-        val changedIssues = issueApplicationRankSRervice.rankIssue(command.issueId, command.targetIssueId, command.isBefore)
+        val changedIssues = issueApplicationRankService.rankIssue(command.issueId, command.targetIssueId, command.isBefore)
         return changedIssues.map { IssueChangedOrderDTO(it) }
+    }
+
+    @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.DELETE])
+    fun removeIssue(@PathVariable issueId: String) {
+        issueApplicationService.removeIssue(issueId)
     }
 }

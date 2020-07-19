@@ -24,7 +24,7 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
     }
 
     fun queryIssueDetail(issueId: String): Issue {
-        return issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        return issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
     }
 
     fun updateIssue(command: UpdateIssueCommand) {
@@ -37,9 +37,11 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
         return issueRepository.findAllByProjectId(projectId)
     }
 
-
-
     fun kanbanRecentlyIssues(kanbanId: String): List<Issue> {
         return issueRepository.findTop10ByKanbanIdOrderByUpdatedAtDesc(kanbanId)
+    }
+
+    fun removeIssue(issueId: String) {
+        issueRepository.delete(issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() })
     }
 }
