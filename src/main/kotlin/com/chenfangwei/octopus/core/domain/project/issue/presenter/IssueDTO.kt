@@ -11,4 +11,5 @@ data class IssueDTO constructor(private val issue: Issue) {
     val title = issue.title
     var assigneeId = issue.assigneeId
     var order = issue.order
+    var comments = issue.comments
 }

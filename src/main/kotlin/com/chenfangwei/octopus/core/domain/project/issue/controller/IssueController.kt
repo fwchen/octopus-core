@@ -1,7 +1,10 @@
-package com.chenfangwei.octopus.core.domain.project.issue
+package com.chenfangwei.octopus.core.domain.project.issue.controller
 
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.ProjectPermissionService
+import com.chenfangwei.octopus.core.domain.project.issue.IssueApplicationRankService
+import com.chenfangwei.octopus.core.domain.project.issue.IssueApplicationService
+import com.chenfangwei.octopus.core.domain.project.issue.IssuePermissionService
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.RankIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
@@ -61,7 +64,8 @@ class IssueController(
     }
 
     @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.DELETE])
-    fun removeIssue(@PathVariable issueId: String) {
+    fun removeIssue(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String) {
+        issuePermissionService.guardOperationIssue(issueId, userId)
         issueApplicationService.removeIssue(issueId)
     }
 }

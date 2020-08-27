@@ -1,5 +1,6 @@
 package com.chenfangwei.octopus.core.domain.project.issue
 
+import com.chenfangwei.octopus.core.domain.project.issue.command.CreateCommentCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
@@ -43,5 +44,11 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
 
     fun removeIssue(issueId: String) {
         issueRepository.delete(issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() })
+    }
+
+    fun createComment(command: CreateCommentCommand) {
+        val issue = issueRepository.findById(command.issueId).orElseThrow { EntityNotFoundException() }
+        issue.addComment(command.userId, command.content)
+        issueRepository.save(issue)
     }
 }

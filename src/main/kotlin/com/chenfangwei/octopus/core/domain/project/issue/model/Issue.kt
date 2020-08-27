@@ -1,5 +1,6 @@
 package com.chenfangwei.octopus.core.domain.project.issue.model
 
+import com.chenfangwei.octopus.core.share.factory.generateId
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -15,6 +16,7 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     var assigneeId: String? = null
     var deadline: Date? = null
     var deadlineDone: Boolean? = null
+    var comments: List<Comment> = mutableListOf()
 
     @CreatedDate
     var createdAt: Date? = null
@@ -28,5 +30,9 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
         } else {
             this.order = maxOrderIssue.order + 100F
         }
+    }
+
+    fun addComment(creatorId: String, content: String) {
+        comments += Comment(generateId(), id, content, creatorId)
     }
 }
