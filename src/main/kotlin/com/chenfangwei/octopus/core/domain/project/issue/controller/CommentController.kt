@@ -1,4 +1,5 @@
 package com.chenfangwei.octopus.core.domain.project.issue.controller
+
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.issue.IssueApplicationService
 import com.chenfangwei.octopus.core.domain.project.issue.IssuePermissionService
@@ -15,9 +16,9 @@ class CommentController(
 
     @RequestMapping(value = ["/issue/{issueId}/comment"], method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun createComment(@RequestBody command: @Valid CreateCommentCommand,
-                    @RequestHeader(AuthUserIdKey) userId: String,
-                    @PathVariable issueId: String) {
+    fun createComment(@Valid @RequestBody command: CreateCommentCommand,
+                      @RequestHeader(AuthUserIdKey) userId: String,
+                      @PathVariable issueId: String) {
         command.userId = userId
         issuePermissionService.guardOperationIssue(issueId, userId)
         issueApplicationService.createComment(command)

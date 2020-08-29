@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 class IssueFactory(private val issueRepository: IssueRepository) {
 
     fun issue(command: CreateIssueCommand): Issue {
+        // TODO 重构 id 生成
         val id = command.projectId + "-" + issueRepository.countByProjectId(command.projectId)
         val issue = Issue(id, command.projectId, command.title, command.userId)
         issue.columnId = command.columnId

@@ -4,6 +4,7 @@ import com.chenfangwei.octopus.core.share.factory.generateId
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.annotation.Version
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
@@ -17,6 +18,11 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     var deadline: Date? = null
     var deadlineDone: Boolean? = null
     var comments: List<Comment> = mutableListOf()
+    var removed: Boolean = false;
+
+    @Version
+    var version: Long? = null // left @EnableMongoAuditing enabled.
+
 
     @CreatedDate
     var createdAt: Date? = null
@@ -34,5 +40,9 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
 
     fun addComment(creatorId: String, content: String) {
         comments += Comment(generateId(), id, content, creatorId)
+    }
+
+    fun remove() {
+        removed = true
     }
 }

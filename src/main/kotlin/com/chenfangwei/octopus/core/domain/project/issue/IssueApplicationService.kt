@@ -43,7 +43,9 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
     }
 
     fun removeIssue(issueId: String) {
-        issueRepository.delete(issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() })
+        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        issue.remove()
+        issueRepository.save(issue)
     }
 
     fun createComment(command: CreateCommentCommand) {

@@ -1,16 +1,14 @@
 package com.chenfangwei.octopus.core.storage
 
 import io.minio.MinioClient
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
 class MinIOService(@Value("\${storage.minio.accesskey}") accessKey: String, @Value("\${storage.minio.endpoint}") endpoint: String, @Value("\${storage.minio.secretkey}") secretKey: String, @Value("\${storage.minio.buckets.image}") imageBucketName: String) {
-    private val minioClient: MinioClient
+    private val minioClient: MinioClient = MinioClient(endpoint, accessKey, secretKey)
 
     init {
-        minioClient = MinioClient(endpoint, accessKey, secretKey)
         checkBucketExistOrCreate(imageBucketName)
     }
 

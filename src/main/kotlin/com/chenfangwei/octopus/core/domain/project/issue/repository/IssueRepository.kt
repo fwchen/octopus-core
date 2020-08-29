@@ -2,8 +2,10 @@ package com.chenfangwei.octopus.core.domain.project.issue.repository
 
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.Query
 
 interface IssueRepository: MongoRepository<Issue, String> {
+    @Query("{'columnId': ?0, 'removed': false}")
     fun findAllByColumnId(columnId: String): List<Issue>
     fun countByProjectId(projectId: String): Int
     fun findAllByProjectId(projectId: String): List<Issue>
