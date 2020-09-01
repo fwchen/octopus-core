@@ -1,16 +1,22 @@
 package com.chenfangwei.octopus.core.storage
 
+import com.chenfangwei.octopus.core.config.StorageBucketConfig
+import com.chenfangwei.octopus.core.share.factory.generateId
+import io.minio.PutObjectArgs
 import io.minio.PutObjectOptions
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.util.DigestUtils
+import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
 
+
 @Service
 class StorageService(
         private val minIOService: MinIOService,
+        private val storageBucketConfig: StorageBucketConfig,
         @Value("\${storage.minio.buckets.image}") private val imageBucketName: String) {
 
     fun saveBase64PngImage(code: String): String {
@@ -25,6 +31,17 @@ class StorageService(
         byteArrayInputStream.close()
         toMd5Stream.close()
         return "object://$objectName"
+    }
+
+    fun saveFile(file: MultipartFile) {
+        val options = PutObjectOptions(file.size, -1)
+        val objectName = generateId()
+        val userMetadata: Map<String, String> = HashMap()
+        minIOService.getMinioClient().putObject(PutObjectArgs.builder().bucket(storageBucketConfig.fileBucketName).`object`(objectName).stream(
+                file.inputStream, file.size, -1)
+                .userMetadata(userMetadata)
+                .build())
+
     }
 
     fun receiveObject(objectId: String): InputStream? {

@@ -8,6 +8,7 @@ import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository
 import com.chenfangwei.octopus.core.share.exception.EntityNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class IssueApplicationService(private val issueRepository: IssueRepository, private val issueFactory: IssueFactory) {
@@ -52,5 +53,9 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
         val issue = issueRepository.findById(command.issueId).orElseThrow { EntityNotFoundException() }
         issue.addComment(command.userId, command.content)
         issueRepository.save(issue)
+    }
+    
+    fun saveIssueAttachment(issueId: String, userId: String, file: MultipartFile) {
+        
     }
 }

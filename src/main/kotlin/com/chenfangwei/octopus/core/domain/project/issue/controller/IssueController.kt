@@ -14,6 +14,7 @@ import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDTO
 import com.chenfangwei.octopus.core.share.exception.BadRequestException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
 
 @RestController
@@ -67,5 +68,10 @@ class IssueController(
     fun removeIssue(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String) {
         issuePermissionService.guardOperationIssue(issueId, userId)
         issueApplicationService.removeIssue(issueId)
+    }
+
+    @PostMapping(value = ["/issue/{issueId}/attachment"])
+    fun uploadAttachment(@PathVariable issueId: String, @RequestParam file: MultipartFile) {
+        
     }
 }

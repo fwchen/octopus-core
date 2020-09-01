@@ -26,3 +26,4 @@ storage:
     secretkey: miniostorage
     buckets:
       image: octopus-image
+      file: octopus-file
