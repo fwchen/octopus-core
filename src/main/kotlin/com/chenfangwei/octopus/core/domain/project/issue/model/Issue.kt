@@ -18,6 +18,7 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     var deadline: Date? = null
     var deadlineDone: Boolean? = null
     var comments: List<Comment> = mutableListOf()
+    var attachments: List<Attachment> = mutableListOf()
     var removed: Boolean = false;
 
     @Version
@@ -39,7 +40,15 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     }
 
     fun addComment(creatorId: String, content: String) {
-        comments += Comment(generateId(), id, content, creatorId)
+        comments = comments + Comment(generateId(), id, content, creatorId)
+    }
+
+    fun addAttachment(objectId: String, fileName: String?, contentType: String?, creatorId: String) {
+        attachments = attachments + Attachment.create(objectId, fileName, contentType, creatorId)
+    }
+
+    fun findAttachment(attachmentId: String): Attachment {
+        return attachments.find { attachment -> attachment.id == attachmentId }!!
     }
 
     fun remove() {

@@ -7,11 +7,18 @@ import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository
 import com.chenfangwei.octopus.core.share.exception.EntityNotFoundException
+import com.chenfangwei.octopus.core.storage.StorageService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 @Service
-class IssueApplicationService(private val issueRepository: IssueRepository, private val issueFactory: IssueFactory) {
+class IssueApplicationService(
+        private val issueRepository: IssueRepository,
+        private val issueFactory: IssueFactory,
+        private val storageService: StorageService) {
 
     fun createIssue(command: CreateIssueCommand): String {
         val maxOrderIssue = this.issueRepository.findTop1ByProjectIdOrderByOrderDesc(command.projectId)
@@ -44,7 +51,7 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
     }
 
     fun removeIssue(issueId: String) {
-        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        val issue = issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
         issue.remove()
         issueRepository.save(issue)
     }
@@ -54,8 +61,20 @@ class IssueApplicationService(private val issueRepository: IssueRepository, priv
         issue.addComment(command.userId, command.content)
         issueRepository.save(issue)
     }
-    
-    fun saveIssueAttachment(issueId: String, userId: String, file: MultipartFile) {
-        
+
+    @Transactional
+    fun saveAttachment(issueId: String, userId: String, file: MultipartFile) {
+        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        val objectId = storageService.saveFile(file)
+        issue.addAttachment(objectId, file.originalFilename, file.contentType, userId)
+        issueRepository.save(issue)
+    }
+
+    fun getAttachment(issueId: String, attachmentId: String): ByteArrayOutputStream {
+        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        val attachment = issue.findAttachment(attachmentId)
+        val outputStream = ByteArrayOutputStream()
+        storageService.receiveFile(attachment.objectId)!!.transferTo(outputStream)
+        return outputStream
     }
 }

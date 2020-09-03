@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 
 @Service
@@ -33,18 +34,22 @@ class StorageService(
         return "object://$objectName"
     }
 
-    fun saveFile(file: MultipartFile) {
-        val options = PutObjectOptions(file.size, -1)
+    fun  saveFile(file: MultipartFile): String {
         val objectName = generateId()
-        val userMetadata: Map<String, String> = HashMap()
+        val userMetadata: HashMap<String, String> = HashMap()
+        userMetadata["FileName"] = file.name
         minIOService.getMinioClient().putObject(PutObjectArgs.builder().bucket(storageBucketConfig.fileBucketName).`object`(objectName).stream(
                 file.inputStream, file.size, -1)
                 .userMetadata(userMetadata)
                 .build())
-
+        return objectName
     }
 
     fun receiveObject(objectId: String): InputStream? {
         return minIOService.getMinioClient().getObject(imageBucketName, objectId)
+    }
+
+    fun receiveFile(objectId: String): InputStream? {
+        return minIOService.getMinioClient().getObject(storageBucketConfig.fileBucketName, objectId)
     }
 }

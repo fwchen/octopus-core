@@ -11,10 +11,14 @@ import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueComm
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueChangedOrderDTO
 import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDTO
+import com.chenfangwei.octopus.core.domain.project.issue.presenter.IssueDetailDTO
 import com.chenfangwei.octopus.core.share.exception.BadRequestException
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import javax.validation.Valid
 
 @RestController
@@ -32,8 +36,8 @@ class IssueController(
     }
 
     @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.GET])
-    fun queryIssueDetail(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable issueId: String): Issue {
-        return issueApplicationService.queryIssueDetail(issueId)
+    fun queryIssueDetail(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable issueId: String): IssueDetailDTO {
+        return IssueDetailDTO(issueApplicationService.queryIssueDetail(issueId))
     }
 
     @RequestMapping(value = ["/project/{projectId}/issues"], method = [RequestMethod.GET])
@@ -71,7 +75,13 @@ class IssueController(
     }
 
     @PostMapping(value = ["/issue/{issueId}/attachment"])
-    fun uploadAttachment(@PathVariable issueId: String, @RequestParam file: MultipartFile) {
-        
+    fun uploadAttachment(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String, @RequestParam file: MultipartFile) {
+        issueApplicationService.saveAttachment(issueId, userId, file)
+    }
+
+    @GetMapping(value = ["/issue/{issueId}/attachment/{attachmentId}"], produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
+    fun getAttachment(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable attachmentId: String): ByteArray {
+        issuePermissionService.guardOperationIssue(issueId, userId)
+        return issueApplicationService.getAttachment(issueId, attachmentId).toByteArray()
     }
 }
