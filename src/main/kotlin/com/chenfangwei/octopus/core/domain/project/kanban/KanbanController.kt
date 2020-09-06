@@ -3,6 +3,7 @@ package com.chenfangwei.octopus.core.domain.project.kanban
 import com.chenfangwei.octopus.core.constant.AuthUserIdKey
 import com.chenfangwei.octopus.core.domain.project.kanban.column.presenter.ColumnDTO
 import com.chenfangwei.octopus.core.domain.project.kanban.command.CreateKanbanCommand
+import com.chenfangwei.octopus.core.domain.project.kanban.model.Kanban
 import com.chenfangwei.octopus.core.domain.project.kanban.presenter.KanbanDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -27,5 +28,10 @@ class KanbanController(private val kanbanApplicationService: KanbanApplicationSe
     @RequestMapping(value = ["/kanban/{kanbanId}"], method = [RequestMethod.GET])
     fun queryKanbanDetail(@RequestHeader(AuthUserIdKey) userId: String, @PathVariable kanbanId: String): KanbanDTO {
         return KanbanDTO(kanbanApplicationService.kanbanDetail(kanbanId, userId))
+    }
+
+    @RequestMapping(value = ["/kanbans"], method = [RequestMethod.GET])
+    fun queryUserAllKanban(@RequestHeader(AuthUserIdKey) userId: String): List<Kanban> {
+        return kanbanApplicationService.userAllKanban(userId)
     }
 }

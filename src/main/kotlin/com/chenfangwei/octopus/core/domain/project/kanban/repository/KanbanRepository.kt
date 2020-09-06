@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 
 interface KanbanRepository : MongoRepository<Kanban, String> {
     fun findAllByProjectId(projectId: String): List<Kanban>
+    fun findAllByCreatorId(userId: String): List<Kanban>
 }

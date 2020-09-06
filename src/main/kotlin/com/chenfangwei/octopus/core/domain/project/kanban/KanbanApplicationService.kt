@@ -31,5 +31,7 @@ class KanbanApplicationService(private val kanbanRepository: KanbanRepository,
         return kanban
     }
 
-
+    fun userAllKanban(userId: String): List<Kanban> {
+        return kanbanRepository.findAllByCreatorId(userId)
+    }
 }

@@ -19,7 +19,7 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     var deadlineDone: Boolean? = null
     var comments: List<Comment> = mutableListOf()
     var attachments: List<Attachment> = mutableListOf()
-    var removed: Boolean = false;
+    var removed: Boolean = false
 
     @Version
     var version: Long? = null // left @EnableMongoAuditing enabled.
@@ -40,7 +40,11 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     }
 
     fun addComment(creatorId: String, content: String) {
-        comments = comments + Comment(generateId(), id, content, creatorId)
+        comments = comments + Comment.create(generateId(), id, content, creatorId)
+    }
+
+    fun removeComment(commentId: String) {
+        comments = comments.dropWhile { comment -> comment.getId() == commentId }
     }
 
     fun addAttachment(objectId: String, fileName: String?, contentType: String?, creatorId: String) {
@@ -49,6 +53,10 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
 
     fun findAttachment(attachmentId: String): Attachment {
         return attachments.find { attachment -> attachment.id == attachmentId }!!
+    }
+
+    fun removeAttachment(attachmentId: String) {
+        attachments = attachments.dropWhile { attachment -> attachment.id == attachmentId }
     }
 
     fun remove() {

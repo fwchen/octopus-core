@@ -79,6 +79,12 @@ class IssueController(
         issueApplicationService.saveAttachment(issueId, userId, file)
     }
 
+    @RequestMapping(value = ["/issue/{issueId}/attachment/{attachmentId}"], method = [RequestMethod.DELETE])
+    fun delete(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable attachmentId: String) {
+        issuePermissionService.guardOperationIssue(issueId, userId)
+        issueApplicationService.deleteAttachment(issueId, userId, attachmentId)
+    }
+
     @GetMapping(value = ["/issue/{issueId}/attachment/{attachmentId}"], produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
     fun getAttachment(@PathVariable issueId: String, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable attachmentId: String): ByteArray {
         issuePermissionService.guardOperationIssue(issueId, userId)

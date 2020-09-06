@@ -4,6 +4,7 @@ import com.chenfangwei.octopus.core.config.StorageBucketConfig
 import com.chenfangwei.octopus.core.share.factory.generateId
 import io.minio.PutObjectArgs
 import io.minio.PutObjectOptions
+import io.minio.RemoveObjectArgs
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.util.DigestUtils
@@ -45,11 +46,20 @@ class StorageService(
         return objectName
     }
 
+    fun receiveFile(objectId: String): InputStream? {
+        return minIOService.getMinioClient().getObject(storageBucketConfig.fileBucketName, objectId)
+    }
+
+    fun removeFile(objectId: String) {
+        return minIOService.getMinioClient().removeObject(RemoveObjectArgs.builder()
+                .bucket(storageBucketConfig.fileBucketName)
+                .`object`(objectId)
+                .build())
+    }
+
     fun receiveObject(objectId: String): InputStream? {
         return minIOService.getMinioClient().getObject(imageBucketName, objectId)
     }
 
-    fun receiveFile(objectId: String): InputStream? {
-        return minIOService.getMinioClient().getObject(storageBucketConfig.fileBucketName, objectId)
-    }
+
 }

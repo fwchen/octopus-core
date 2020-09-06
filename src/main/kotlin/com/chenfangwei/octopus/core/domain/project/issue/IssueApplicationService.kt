@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayOutputStream
-import java.io.InputStream
 
 @Service
 class IssueApplicationService(
@@ -62,19 +61,35 @@ class IssueApplicationService(
         issueRepository.save(issue)
     }
 
+    // TODO lock
     @Transactional
     fun saveAttachment(issueId: String, userId: String, file: MultipartFile) {
-        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        val issue = issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
         val objectId = storageService.saveFile(file)
         issue.addAttachment(objectId, file.originalFilename, file.contentType, userId)
         issueRepository.save(issue)
     }
 
     fun getAttachment(issueId: String, attachmentId: String): ByteArrayOutputStream {
-        val issue = issueRepository.findById(issueId).orElseThrow{ EntityNotFoundException() }
+        val issue = issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
         val attachment = issue.findAttachment(attachmentId)
         val outputStream = ByteArrayOutputStream()
         storageService.receiveFile(attachment.objectId)!!.transferTo(outputStream)
         return outputStream
+    }
+
+    fun deleteComment(issueId: String, commentId: String) {
+        val issue = issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
+        issue.removeComment(commentId)
+        issueRepository.save(issue)
+    }
+
+    @Transactional
+    fun deleteAttachment(issueId: String, userId: String, attachmentId: String) {
+        val issue = issueRepository.findById(issueId).orElseThrow { EntityNotFoundException() }
+        val attachment = issue.findAttachment(attachmentId)
+        issue.removeAttachment(attachmentId)
+        storageService.removeFile(attachment.objectId)
+        issueRepository.save(issue)
     }
 }

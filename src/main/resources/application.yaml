@@ -27,3 +27,6 @@ storage:
     buckets:
       image: octopus-image
       file: octopus-file
+
+spring.servlet.multipart.max-file-size: 128KB
+spring.servlet.multipart.max-request-size: 128KB
