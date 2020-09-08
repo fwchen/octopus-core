@@ -46,8 +46,10 @@ class IssueController(
         return issueApplicationService.queryProjectIssues(projectId)
     }
 
-    @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.PATCH])
-    fun updateIssueDetail(@RequestBody command: @Valid UpdateIssueCommand, @RequestHeader(AuthUserIdKey) userId: String, @PathVariable issueId: String) {
+    @RequestMapping(value = ["/issue/{issueId}"], method = [RequestMethod.PUT])
+    fun updateIssueDetail(@Valid @RequestBody command: UpdateIssueCommand,
+                          @RequestHeader(AuthUserIdKey) userId: String,
+                          @PathVariable issueId: String) {
         if (command.id != issueId) {
             throw BadRequestException()
         }

@@ -5,13 +5,16 @@ import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 class IssueDetailDTO constructor(issue: Issue) {
     val id = issue.id
     val kanbanId = issue.kanbanId
-    var desc = issue.desc
+    val desc = issue.desc
     val columnId = issue.columnId
     val projectId = issue.projectId
-    var creatorId = issue.creatorId
+    val creatorId = issue.creatorId
+    val deadline = issue.deadline
+    val startTime = issue.startTime
+    val deadlineDone = issue.deadlineDone
     val title = issue.title
-    var assigneeId = issue.assigneeId
-    var order = issue.order
-    var comments = issue.comments
-    var attachments = issue.attachments.map { attachment -> AttachmentDTO(attachment) }
+    val assigneeId = issue.assigneeId
+    val order = issue.order
+    val comments = issue.comments
+    val attachments = issue.attachments.map { attachment -> AttachmentDTO(attachment) }
 }

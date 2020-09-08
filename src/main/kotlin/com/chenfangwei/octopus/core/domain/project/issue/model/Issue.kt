@@ -15,6 +15,7 @@ class Issue(@Id val id: String, val projectId: String, var title: String, val cr
     var desc: String = ""
     var order: Float = 0F
     var assigneeId: String? = null
+    var startTime: Date? = null
     var deadline: Date? = null
     var deadlineDone: Boolean? = null
     var comments: List<Comment> = mutableListOf()

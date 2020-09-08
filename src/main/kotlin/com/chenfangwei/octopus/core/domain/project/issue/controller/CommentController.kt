@@ -27,7 +27,8 @@ class CommentController(
 
     @RequestMapping(value = ["/issue/{issueId}/comment/{commentId}"], method = [RequestMethod.DELETE])
     fun deleteComment(@RequestHeader(AuthUserIdKey) userId: String,
-                      @PathVariable issueId: String, @PathVariable commentId: String) {
+                      @PathVariable issueId: String,
+                      @PathVariable commentId: String) {
         issuePermissionService.guardOperationIssue(issueId, userId)
         issueApplicationService.deleteComment(issueId, commentId)
     }
