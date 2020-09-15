@@ -3,6 +3,7 @@ package com.chenfangwei.octopus.core.domain.project.issue
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateCommentCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
+import com.chenfangwei.octopus.core.domain.project.issue.event.UpdatedIssueEvent
 import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository
@@ -17,6 +18,7 @@ import java.io.ByteArrayOutputStream
 class IssueApplicationService(
         private val issueRepository: IssueRepository,
         private val issueFactory: IssueFactory,
+        private val issueMessageApplicationService: IssueMessageApplicationService,
         private val storageService: StorageService) {
 
     fun createIssue(command: CreateIssueCommand): String {
@@ -39,6 +41,7 @@ class IssueApplicationService(
         val issue = issueRepository.findById(command.id).orElseThrow { EntityNotFoundException() }
         command.copyToIssue(issue)
         issueRepository.save(issue)
+        issueMessageApplicationService.sendUpdatedIssue(UpdatedIssueEvent(issue))
     }
 
     fun queryProjectIssues(projectId: String): List<Issue> {
