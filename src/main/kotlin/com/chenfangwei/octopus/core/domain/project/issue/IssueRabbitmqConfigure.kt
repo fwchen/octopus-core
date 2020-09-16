@@ -1,5 +1,7 @@
 package com.chenfangwei.octopus.core.domain.project.issue
 
+import com.chenfangwei.octopus.core.share.IssueRabbitmqExchange
+import com.chenfangwei.octopus.core.share.IssueRabbitmqUpdatedEventQueue
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;

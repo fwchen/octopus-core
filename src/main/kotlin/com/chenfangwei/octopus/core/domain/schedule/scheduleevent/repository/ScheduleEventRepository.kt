@@ -9,4 +9,6 @@ import java.util.*
 interface ScheduleEventRepository: MongoRepository<ScheduleEvent, String> {
     @Query("{'userId': ?0, 'title': ?1, 'startTime': ?2, 'endTime': ?3}")
     fun findSameEvent(userId: String, title: String, startTime: Date, endTime: Date): ScheduleEvent?
+
+    fun findByLinkId(linkId: String): ScheduleEvent?
 }

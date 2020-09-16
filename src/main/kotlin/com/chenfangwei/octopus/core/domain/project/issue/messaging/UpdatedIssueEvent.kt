@@ -1,4 +1,4 @@
-package com.chenfangwei.octopus.core.domain.project.issue.event
+package com.chenfangwei.octopus.core.domain.project.issue.messaging
 
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 

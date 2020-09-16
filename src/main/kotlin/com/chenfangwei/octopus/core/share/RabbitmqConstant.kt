@@ -1,5 +1,4 @@
-package com.chenfangwei.octopus.core.domain.project.issue
-
+package com.chenfangwei.octopus.core.share
 
 const val IssueRabbitmqExchange = "octopus.issue.event.tx"
 

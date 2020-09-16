@@ -9,7 +9,7 @@ import java.util.*
 @Component
 class ScheduleEventFactory {
 
-    fun createIssueScheduleEvent(title: String, startTime: Date, endTime: Date, userId: String): ScheduleEvent {
+    fun createIssueScheduleEvent(title: String, startTime: Date, endTime: Date, userId: String, linkId: String): ScheduleEvent {
         val id = generateId()
         return  ScheduleEvent(
                 id,
@@ -17,7 +17,8 @@ class ScheduleEventFactory {
                 ScheduleEventType.Issue,
                 startTime,
                 endTime,
-                userId
+                userId,
+                linkId
         )
     }
 }

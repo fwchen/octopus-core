@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service
 class ScheduleEventService(private val scheduleEventRepository: ScheduleEventRepository) {
 
 
-    fun save(event: ScheduleEvent) {
-        val dbEvent = scheduleEventRepository.findSameEvent(event.userId, event.title, event.startTime, event.endTime)
-        if (dbEvent != null) {
 
-        } else {
-            scheduleEventRepository.save(event)
-        }
+    fun saveEvent(event: ScheduleEvent) {
+
+        scheduleEventRepository.save(event)
     }
+
+
 }
