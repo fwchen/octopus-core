@@ -3,7 +3,7 @@ package com.chenfangwei.octopus.core.domain.project.issue
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateCommentCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.CreateIssueCommand
 import com.chenfangwei.octopus.core.domain.project.issue.command.UpdateIssueCommand
-import com.chenfangwei.octopus.core.domain.project.issue.messaging.UpdatedIssueEvent
+import com.chenfangwei.octopus.core.domain.project.issue.event.UpdatedIssueEvent
 import com.chenfangwei.octopus.core.domain.project.issue.factory.IssueFactory
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 import com.chenfangwei.octopus.core.domain.project.issue.repository.IssueRepository

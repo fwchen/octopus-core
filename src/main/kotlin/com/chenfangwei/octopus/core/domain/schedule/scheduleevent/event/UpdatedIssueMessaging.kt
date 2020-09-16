@@ -1,6 +1,6 @@
-package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.messaging.event.income
+package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.event
 
-data class IncomeUpdatedIssueEvent(
+data class UpdatedIssueMessaging(
         val id: String,
         val kanbanId: String,
         val columnId: String,

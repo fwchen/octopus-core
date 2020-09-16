@@ -1,4 +1,4 @@
-package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.messaging
+package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.event
 
 import com.chenfangwei.octopus.core.domain.schedule.scheduleevent.ScheduleEventConfigure
 import com.chenfangwei.octopus.core.share.IssueRabbitmqUpdatedEventQueue
