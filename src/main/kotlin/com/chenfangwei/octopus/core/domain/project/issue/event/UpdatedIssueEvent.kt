@@ -2,6 +2,7 @@ package com.chenfangwei.octopus.core.domain.project.issue.event
 
 import com.chenfangwei.octopus.core.domain.project.issue.model.Issue
 
+@Serializable
 data class UpdatedIssueEvent(private val issue: Issue) {
     val id = issue.id
     val kanbanId = issue.kanbanId

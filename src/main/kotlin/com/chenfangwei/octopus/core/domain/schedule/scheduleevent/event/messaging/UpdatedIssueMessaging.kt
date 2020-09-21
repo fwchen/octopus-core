@@ -1,5 +1,6 @@
-package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.event
+package com.chenfangwei.octopus.core.domain.schedule.scheduleevent.event.messaging
 
+@Serializable
 data class UpdatedIssueMessaging(
         val id: String,
         val kanbanId: String,

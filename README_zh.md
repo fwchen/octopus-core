@@ -21,3 +21,12 @@ rabbitmq:
     - "5672:5672"
     - "15672:15672"
 ```
+
+```
+docker run -p 5672:5672 -p 15672:15672 rabbitmq:management -d
+```
+
+### MongoDB
+```
+docker run --name some-mongo -p 27017:27017 -d mongo:4.4.1-bionic
+```

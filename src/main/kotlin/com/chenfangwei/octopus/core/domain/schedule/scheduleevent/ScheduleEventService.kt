@@ -10,7 +10,6 @@ class ScheduleEventService(private val scheduleEventRepository: ScheduleEventRep
 
 
     fun saveEvent(event: ScheduleEvent) {
-
         scheduleEventRepository.save(event)
     }
 
