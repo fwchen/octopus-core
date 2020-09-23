@@ -11,7 +11,7 @@ class ScheduleEventFactory {
 
     fun createIssueScheduleEvent(title: String, startTime: Date, endTime: Date, userId: String, linkId: String): ScheduleEvent {
         val id = generateId()
-        return  ScheduleEvent(
+        return ScheduleEvent(
                 id,
                 title,
                 ScheduleEventType.Issue,

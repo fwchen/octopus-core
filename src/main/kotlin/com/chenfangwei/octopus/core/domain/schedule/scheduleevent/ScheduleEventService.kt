@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service
 class ScheduleEventService(private val scheduleEventRepository: ScheduleEventRepository) {
 
 
-
-    fun saveEvent(event: ScheduleEvent) {
+    fun save(event: ScheduleEvent) {
         scheduleEventRepository.save(event)
     }
-
 
 }
