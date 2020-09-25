@@ -9,9 +9,9 @@ class ScheduleEventApplicationService(
         private val scheduleEventFactory: ScheduleEventFactory,
         private val scheduleEventService: ScheduleEventService) {
 
-    fun handleIssueScheduleEvent(title: String, startTime: Date, endTime: Date, userId: String, linkId: String) {
+    fun handleIssueScheduleEvent(title: String, startTime: Date, endTime: Date, userId: String, issueId: String) {
         val scheduleEvent = scheduleEventFactory.createIssueScheduleEvent(
-                title = title, startTime = startTime, endTime = endTime, userId = userId, linkId = linkId
+                title = title, startTime = startTime, endTime = endTime, userId = userId, linkId = issueId
         )
         scheduleEventService.save(scheduleEvent)
     }
